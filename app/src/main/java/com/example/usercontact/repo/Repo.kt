@@ -15,5 +15,7 @@ class Repo(private val userDatabaseDao: UserDatabaseDao) {
     fun delete(){
         userDatabaseDao.delete()
     }
-
+    fun getContact(){
+        userDatabaseDao.getContact()
+    }
 }

@@ -16,5 +16,7 @@ interface UserDatabaseDao {
     @Query("SELECT * FROM user_contact_table")
     fun getAllContact(): LiveData<List<UserModel>>
 
+    @Query("SELECT * FROM user_contact_table")
+    fun getContact(): UserModel?
 
 }
