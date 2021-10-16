@@ -1,17 +1,10 @@
 package com.example.usercontact.contact
-
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.ContentValues
-import android.content.Context
 import android.provider.ContactsContract
-import android.util.Log
 import androidx.databinding.Observable
-import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.android.contacsusers.repo.Repo
 import com.example.usercontact.database.UserModel
 import kotlinx.coroutines.*
@@ -26,7 +19,6 @@ class ContactViewModel(private val repo: Repo,  application: Application): Andro
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
 
-//    val isVisible : ObservableField<Boolean> = ObservableField()
     val isVisibleClear = MutableLiveData<Boolean>()
     val isVisibleGet = MutableLiveData<Boolean>()
 
