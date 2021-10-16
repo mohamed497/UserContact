@@ -7,18 +7,18 @@ import android.content.Context
 import android.provider.ContactsContract
 import android.util.Log
 import androidx.databinding.Observable
+import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.contacsusers.repo.Repo
 import com.example.usercontact.database.UserModel
 import kotlinx.coroutines.*
 
-//class ContactViewModel(private val  userKey: Long= 0,
-//    val database: UserDatabaseDao): ViewModel() {
 class ContactViewModel(private val repo: Repo,  application: Application): AndroidViewModel(application),Observable {
 
-    val context = application
+    private val context = application
 
     val contact= repo.contacts
 
@@ -26,19 +26,28 @@ class ContactViewModel(private val repo: Repo,  application: Application): Andro
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
 
+//    val isVisible : ObservableField<Boolean> = ObservableField()
+    val isVisibleClear = MutableLiveData<Boolean>()
+    val isVisibleGet = MutableLiveData<Boolean>()
+
 
     fun clearAllContacts(){
         clearAll()
+        isVisibleClear.value = false
+        isVisibleGet.value = true
     }
     fun getAllContacts(){
         fetchContacts()
+        isVisibleGet.value = false
     }
 
+    fun insert(userModel: UserModel){
+        uiScope.launch {
+            withContext(Dispatchers.IO){
+                repo.insert(userModel)
 
-    fun insert(userModel: UserModel): Job{
-        return ( viewModelScope.launch {
-            repo.insert(userModel)
-        })
+            }
+        }
     }
 
 
@@ -49,15 +58,6 @@ class ContactViewModel(private val repo: Repo,  application: Application): Andro
             }
         }
     }
-
-    private fun getAll(){
-        uiScope.launch {
-            withContext(Dispatchers.IO){
-                repo.contacts
-            }
-        }
-    }
-
 
 
     override fun onCleared() {
@@ -88,6 +88,8 @@ class ContactViewModel(private val repo: Repo,  application: Application): Andro
 
                 insert(contact)
             }
+            isVisibleClear.value = true
+            isVisibleGet.value = false
         }
 
     }

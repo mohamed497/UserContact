@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.usercontact.database.UserModel
 import com.example.usercontact.databinding.ContactListItemBinding
 
-//class ContactAdapter: ListAdapter<UserModel, ItemViewModel>(UserDiffCallBack()) {
 
 class ContactAdapter: ListAdapter<UserModel, ItemViewModel>(UserDiffCallBack()) {
 
@@ -19,11 +18,11 @@ class ContactAdapter: ListAdapter<UserModel, ItemViewModel>(UserDiffCallBack()) 
     override fun onBindViewHolder(holder: ItemViewModel, position: Int) {
         
         holder.bind(getItem(position)!!)
-//        holder.bind(usersList[position])
     }
 }
 
 class UserDiffCallBack: DiffUtil.ItemCallback<UserModel>() {
+
     override fun areItemsTheSame(oldItem: UserModel, newItem: UserModel): Boolean {
         return oldItem.userNumber == newItem.userNumber
     }
@@ -37,7 +36,6 @@ class UserDiffCallBack: DiffUtil.ItemCallback<UserModel>() {
 class ItemViewModel private constructor(val binding: ContactListItemBinding): RecyclerView.ViewHolder(binding.root){
 
     fun bind(item: UserModel){
-//        binding.userName.text = item.userName
         binding.user = item
         binding.executePendingBindings()
     }

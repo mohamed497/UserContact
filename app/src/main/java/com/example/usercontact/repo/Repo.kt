@@ -8,11 +8,11 @@ class Repo(private val userDatabaseDao: UserDatabaseDao) {
 
     val contacts = userDatabaseDao.getAllContact()
 
-    suspend fun insert(userModel: UserModel){
+    fun insert(userModel: UserModel){
         userDatabaseDao.insert(userModel)
     }
 
-    suspend fun delete(){
+    fun delete(){
         userDatabaseDao.delete()
     }
 

@@ -8,7 +8,7 @@ import androidx.room.*
 interface UserDatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(userModel: UserModel): Long
+    fun insert(userModel: UserModel)
 
     @Query("DELETE FROM user_contact_table")
     fun delete()

@@ -24,6 +24,7 @@ class ContactActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contact)
         val dao: UserDatabaseDao = UserDatabase.getInstance(application).userDatabaseDao
         val repo = Repo(dao)
