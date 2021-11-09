@@ -1,10 +1,10 @@
-package com.example.android.contacsusers.repo
+package com.example.usercontact.repo
 
 
 import com.example.usercontact.database.UserDatabaseDao
 import com.example.usercontact.database.UserModel
 
-class Repo(private val userDatabaseDao: UserDatabaseDao) {
+class UsersRepo(private val userDatabaseDao: UserDatabaseDao) {
 
     val contacts = userDatabaseDao.getAllContact()
 
@@ -17,5 +17,9 @@ class Repo(private val userDatabaseDao: UserDatabaseDao) {
     }
     fun getContact(){
         userDatabaseDao.getContact()
+    }
+
+    fun getUser(userNumber: String): UserModel{
+        return userDatabaseDao.get(userNumber)
     }
 }

@@ -19,4 +19,7 @@ interface UserDatabaseDao {
     @Query("SELECT * FROM user_contact_table")
     fun getContact(): UserModel?
 
+    @Query("SELECT * FROM user_contact_table WHERE userNumber= :userNumber")
+    fun get(userNumber: String): UserModel
+
 }
