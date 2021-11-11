@@ -1,29 +1,24 @@
 package com.example.usercontact.contact
 
 import android.annotation.SuppressLint
-import android.app.Application
+import android.content.Context
 import android.provider.ContactsContract
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.usercontact.baseviewmodel.BaseViewModel
 import com.example.usercontact.repo.UsersRepo
 import com.example.usercontact.database.UserModel
 import kotlinx.coroutines.*
 
-//class ContactViewModel(private val repo: Repo,  application: Application): AndroidViewModel(application),Observable {
-class ContactViewModel(private val repo: UsersRepo, application: Application) :
-    AndroidViewModel(application) {
+class ContactViewModel(private val repo: UsersRepo) :
+    BaseViewModel() {
 
-    private val context = application
 
     val contact = repo.contacts
 
     private val _navigateToSelectedUser = MutableLiveData<String>()
     val navigateToSelectedUser: LiveData<String>
         get() = _navigateToSelectedUser
-
-    private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
 
     val isVisibleClear = MutableLiveData<Boolean>()
@@ -36,13 +31,13 @@ class ContactViewModel(private val repo: UsersRepo, application: Application) :
         isVisibleGet.value = true
     }
 
-    fun getAllContacts() {
-        fetchContacts()
+    fun getAllContacts(context: Context) {
+        fetchContacts(context)
         isVisibleGet.value = false
     }
 
     private fun insert(userModel: UserModel) {
-        uiScope.launch {
+        super.uiScope.launch {
             withContext(Dispatchers.IO) {
                 repo.insert(userModel)
 
@@ -52,7 +47,7 @@ class ContactViewModel(private val repo: UsersRepo, application: Application) :
 
 
     private fun clearAll() {
-        uiScope.launch {
+        super.uiScope.launch {
             withContext(Dispatchers.IO) {
                 repo.delete()
             }
@@ -60,21 +55,8 @@ class ContactViewModel(private val repo: UsersRepo, application: Application) :
     }
 
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
-
-//    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
-//
-//    }
-//
-//    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
-//
-//    }
-
     @SuppressLint("Range")
-    fun fetchContacts() {
+    fun fetchContacts(context: Context) {
 
         val cursor = context.contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,

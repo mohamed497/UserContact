@@ -14,6 +14,7 @@ import com.example.usercontact.database.UserDatabase
 import com.example.usercontact.database.UserDatabaseDao
 import com.example.usercontact.databinding.ActivityContactsBinding
 import com.example.usercontact.details.ContactDetailsActivity
+import kotlinx.android.synthetic.main.activity_contacts.*
 
 private const val READ_CONTACTS_PERMISSION_REQUEST_CODE = 111
 
@@ -25,31 +26,31 @@ class ContactActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contacts)
 
         initNeededData()
         setupBinding()
         displayContactsList()
 
+        btn_add.setOnClickListener {
+            contactViewModel.getAllContacts(this)
+        }
+        btn_remove.setOnClickListener {
+            contactViewModel.clearAllContacts()
+        }
     }
 
     private fun initNeededData() {
         val dao: UserDatabaseDao = UserDatabase.getInstance(application).userDatabaseDao
         val repo = UsersRepo(dao)
-        val factory = ContactViewModelFactory(repo, application)
+        val factory = ContactViewModelFactory(repo)
         contactViewModel = ViewModelProvider(this, factory).get(ContactViewModel::class.java)
     }
 
-//    private fun setupObservers() {
-//        setupContactObserver()
-//    }
-//
-//    private fun setupContactObserver() {
-//
-//    }
 
     private fun fetchData() {
-        contactViewModel.fetchContacts()
+        contactViewModel.fetchContacts(this)
     }
 
     private fun setupBinding() {
@@ -87,7 +88,7 @@ class ContactActivity : AppCompatActivity() {
                     navigateContactDetails(contactId)
                 }
             })
-            binding.contactRecyclerView.adapter = adapter
+            contact_recyclerView.adapter = adapter
         })
     }
 
@@ -124,5 +125,10 @@ class ContactActivity : AppCompatActivity() {
             READ_CONTACTS_PERMISSION_REQUEST_CODE
         )
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        contactViewModel.onCleared()
     }
 }

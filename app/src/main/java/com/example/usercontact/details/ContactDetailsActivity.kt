@@ -12,18 +12,18 @@ import com.example.usercontact.R
 import com.example.usercontact.repo.UsersRepo
 import com.example.usercontact.database.UserDatabase
 import com.example.usercontact.database.UserDatabaseDao
-import com.example.usercontact.databinding.ActivityDetailsContactBinding
+import kotlinx.android.synthetic.main.activity_details_contact.*
 
 
 class ContactDetailsActivity : AppCompatActivity() {
 
     private lateinit var detailsViewModel: ContactDetailsViewModel
-    private lateinit var binding: ActivityDetailsContactBinding
     private lateinit var repo: UsersRepo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_details_contact)
+        setContentView(R.layout.activity_details_contact)
+
 
         val userNumber = intent.getStringExtra(CONTACT_ID_ARG)
         if (userNumber != null) {
@@ -41,20 +41,26 @@ class ContactDetailsActivity : AppCompatActivity() {
             }
     }
 
-        private fun setupObservers() {
-            detailsViewModel.userContact.observe(this, Observer { userModel ->
-                binding.name.text = userModel.userName
-                binding.number.text = userModel.userNumber
-                Log.d(ContactDetailsActivity::class.simpleName, userModel.userName)
-            })
+    private fun setupObservers() {
+        detailsViewModel.userContact.observe(this, Observer { userModel ->
+            name.text = userModel.userName
+            number.text = userModel.userNumber
+            Log.d(ContactDetailsActivity::class.simpleName, userModel.userName)
+        })
     }
+
     private fun initData(userNumber: String) {
         val dao: UserDatabaseDao = UserDatabase.getInstance(application).userDatabaseDao
         repo = UsersRepo(dao)
-        val factory = ContactDetailsViewModelFactory(repo, userNumber)
+        val factory = ContactDetailsViewModelFactory(repo)
         detailsViewModel =
             ViewModelProvider(this, factory).get(ContactDetailsViewModel::class.java)
+        detailsViewModel.getUser(userNumber)
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        detailsViewModel.onCleared()
+    }
 }
