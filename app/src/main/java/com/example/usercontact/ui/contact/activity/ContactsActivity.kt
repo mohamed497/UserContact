@@ -1,6 +1,7 @@
-package com.example.usercontact.contact
+package com.example.usercontact.ui.contact.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,28 +9,29 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.usercontact.service.ContactsService
 import com.example.usercontact.R
-import com.example.usercontact.repo.UsersRepo
-import com.example.usercontact.database.UserDatabase
-import com.example.usercontact.database.UserDatabaseDao
 import com.example.usercontact.databinding.ActivityContactsBinding
-import com.example.usercontact.details.ContactDetailsActivity
+import com.example.usercontact.viewmodel.ContactViewModel
+import com.example.usercontact.ui.contact.adapter.ContactAdapter
+import com.example.usercontact.ui.contact.adapter.OnClickListener
+import com.example.usercontact.ui.details.activity.ContactDetailsActivity
 import kotlinx.android.synthetic.main.activity_contacts.*
 
 private const val READ_CONTACTS_PERMISSION_REQUEST_CODE = 111
 
-class ContactActivity : AppCompatActivity() {
-
+class ContactsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityContactsBinding
-    private lateinit var contactViewModel: ContactViewModel
 
+    private lateinit var contactViewModel: ContactViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contacts)
 
-        initNeededData()
+
+        initViewModel()
         setupBinding()
         displayContactsList()
 
@@ -41,11 +43,8 @@ class ContactActivity : AppCompatActivity() {
         }
     }
 
-    private fun initNeededData() {
-        val dao: UserDatabaseDao = UserDatabase.getInstance(application).userDatabaseDao
-        val repo = UsersRepo(dao)
-        val factory = ContactViewModelFactory(repo)
-        contactViewModel = ViewModelProvider(this, factory).get(ContactViewModel::class.java)
+    private fun initViewModel() {
+        contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
     }
 
 
@@ -114,6 +113,7 @@ class ContactActivity : AppCompatActivity() {
             requestReadContactsPermission()
         } else {
             fetchData()
+            startService(Intent(applicationContext, ContactsService::class.java))
         }
     }
 
@@ -127,8 +127,4 @@ class ContactActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        contactViewModel.onCleared()
-    }
 }

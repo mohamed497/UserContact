@@ -3,7 +3,7 @@ package com.example.usercontact
 import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.usercontact.contact.ContactAdapter
+import com.example.usercontact.ui.contact.adapter.ContactAdapter
 import com.example.usercontact.database.UserModel
 
 

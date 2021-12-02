@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <data>
 
         <variable
             name="viewModel"
-            type="com.example.usercontact.contact.ContactViewModel" />
+            type="com.example.usercontact.viewmodel.ContactViewModel" />
     </data>
 
     <ScrollView

@@ -1,25 +1,21 @@
-package com.example.usercontact.details
+package com.example.usercontact.ui.details.activity
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.usercontact.R
-import com.example.usercontact.repo.UsersRepo
-import com.example.usercontact.database.UserDatabase
-import com.example.usercontact.database.UserDatabaseDao
+import com.example.usercontact.viewmodel.ContactDetailsViewModel
+
 import kotlinx.android.synthetic.main.activity_details_contact.*
 
 
 class ContactDetailsActivity : AppCompatActivity() {
 
     private lateinit var detailsViewModel: ContactDetailsViewModel
-    private lateinit var repo: UsersRepo
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_contact)
@@ -50,11 +46,7 @@ class ContactDetailsActivity : AppCompatActivity() {
     }
 
     private fun initData(userNumber: String) {
-        val dao: UserDatabaseDao = UserDatabase.getInstance(application).userDatabaseDao
-        repo = UsersRepo(dao)
-        val factory = ContactDetailsViewModelFactory(repo)
-        detailsViewModel =
-            ViewModelProvider(this, factory).get(ContactDetailsViewModel::class.java)
+        detailsViewModel = ViewModelProvider(this).get(ContactDetailsViewModel::class.java)
         detailsViewModel.getUser(userNumber)
 
     }

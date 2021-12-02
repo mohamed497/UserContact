@@ -1,4 +1,4 @@
-package com.example.usercontact.contact
+package com.example.usercontact.ui.contact.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

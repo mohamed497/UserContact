@@ -1,4 +1,4 @@
-package com.example.usercontact.baseviewmodel
+package com.example.usercontact.base
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope

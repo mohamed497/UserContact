@@ -1,25 +1,27 @@
 package com.example.usercontact.repo
 
 
-import com.example.usercontact.database.UserDatabaseDao
+import com.example.usercontact.base.App
+import com.example.usercontact.database.UserDatabase
 import com.example.usercontact.database.UserModel
 
-class UsersRepo(private val userDatabaseDao: UserDatabaseDao) {
+class UsersRepo {
+    private val usersDao = UserDatabase.getInstance(App.instance).userDatabaseDao
 
-    val contacts = userDatabaseDao.getAllContact()
+    val contacts = usersDao.getAllContact()
 
     fun insert(userModel: UserModel){
-        userDatabaseDao.insert(userModel)
+        usersDao.insert(userModel)
     }
 
     fun delete(){
-        userDatabaseDao.delete()
+        usersDao.delete()
     }
     fun getContact(){
-        userDatabaseDao.getContact()
+        usersDao.getContact()
     }
 
     fun getUser(userNumber: String): UserModel{
-        return userDatabaseDao.get(userNumber)
+        return usersDao.get(userNumber)
     }
 }

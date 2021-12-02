@@ -1,20 +1,20 @@
-package com.example.usercontact.contact
+package com.example.usercontact.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.usercontact.baseviewmodel.BaseViewModel
+import com.example.usercontact.base.BaseViewModel
 import com.example.usercontact.repo.UsersRepo
 import com.example.usercontact.database.UserModel
 import kotlinx.coroutines.*
 
-class ContactViewModel(private val repo: UsersRepo) :
+class ContactViewModel :
     BaseViewModel() {
 
-
-    val contact = repo.contacts
+    private val userRepo = UsersRepo()
+    val contact = userRepo.contacts
 
     private val _navigateToSelectedUser = MutableLiveData<String>()
     val navigateToSelectedUser: LiveData<String>
@@ -36,10 +36,10 @@ class ContactViewModel(private val repo: UsersRepo) :
         isVisibleGet.value = false
     }
 
-    private fun insert(userModel: UserModel) {
+     fun insert(userModel: UserModel) {
         super.uiScope.launch {
             withContext(Dispatchers.IO) {
-                repo.insert(userModel)
+                userRepo.insert(userModel)
 
             }
         }
@@ -49,7 +49,7 @@ class ContactViewModel(private val repo: UsersRepo) :
     private fun clearAll() {
         super.uiScope.launch {
             withContext(Dispatchers.IO) {
-                repo.delete()
+                userRepo.delete()
             }
         }
     }
@@ -64,6 +64,7 @@ class ContactViewModel(private val repo: UsersRepo) :
         )
         if (cursor != null) {
             while (cursor?.moveToNext()!!) {
+                ContactsContract.RawContacts.VERSION
 
                 val name =
                     cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
